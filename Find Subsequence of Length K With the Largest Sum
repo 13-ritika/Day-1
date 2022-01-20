@@ -1,0 +1,61 @@
+// https://leetcode.com/problems/find-subsequence-of-length-k-with-the-largest-sum/
+// Solution:
+
+class Solution {
+public int[] maxSubsequence(int[] nums, int k) {
+   PriorityQueue<int[]> q = new PriorityQueue<>((a,b)-> (a[0]-b[0])); 
+    for(int i=0; i<nums.length; i++)
+    {
+        q.offer(new int[]{nums[i],i});
+        if(q.size()> k)
+            q.poll();
+    }
+    
+    Set<Integer> index = new HashSet<>();  // HashSet to store index
+    while(!q.isEmpty())
+    {
+        int[] top = q.poll();
+        index.add(top[1]);
+    }
+    
+    int[] result = new int[k];
+    int count =0;
+    for(int i=0; i< nums.length; i++)
+    {
+        if(index.contains(i))
+        {
+            result[count] = nums[i];
+            ++count;
+        }
+    }
+    
+    return result;
+    }
+}
+
+// Approach 2
+
+class Solution {
+    public int[] maxSubsequence(int[] nums, int k) {
+        int n = nums.length; 
+        if (k == 0) return new int[0]; 
+        if (k == n) return nums;
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(pair -> pair[0])); 
+        
+        for(int i = 0; i < n; i++) {
+            pq.add(new int[] {nums[i], i});
+            if (pq.size() > k) {
+                pq.poll();
+            }
+        }
+        
+        int[][] res = new int[k][2]; 
+        for(int i = 0; i < k; i++) {
+            res[i] = pq.poll();
+        }
+        
+        Arrays.sort(res, Comparator.comparingInt(pair -> pair[1]));
+        return Arrays.stream(res).map(pair -> pair[0]).mapToInt(Integer::intValue).toArray();
+    }
+}
