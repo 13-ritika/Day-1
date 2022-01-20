@@ -1,0 +1,53 @@
+// https://leetcode.com/problems/relative-ranks/
+ // Approach 1
+ class Solution {
+    public String[] findRelativeRanks(int[] score) {
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>(Collections.reverseOrder());
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        for(int i=0;i<score.length;i++)
+            pq.add(score[i]);
+        int position=1;
+        while(!pq.isEmpty()){
+            map.put(pq.poll(),position);
+            position++;
+        }
+        String result[] = new String[score.length];
+        for(int i=0;i<score.length;i++){
+            if(map.get(score[i])==1) result[i] = "Gold Medal";
+            else if (map.get(score[i])==2) result[i] = "Silver Medal";
+            else if (map.get(score[i])==3) result[i] = "Bronze Medal";
+            else result[i] = Integer.toString(map.get(score[i]));
+        }
+        return result;
+    }
+}
+
+//Approach 2
+class Solution {
+    public String[] findRelativeRanks(int[] score) {
+        
+        int n = score.length;
+        String[] res = new String[n];
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->score[b]-score[a]);
+        for(int i=0;i<n;i++){
+            pq.add(i);
+        }
+        
+        int i=1;
+        while(!pq.isEmpty()){
+            int idx = pq.poll();
+            if(i==1)
+                res[idx] = "Gold Medal";
+            else if(i==2)
+                res[idx] = "Silver Medal";
+            else if(i==3)
+                res[idx] = "Bronze Medal";
+            else 
+                res[idx] = Integer.toString(i);
+            i++;
+        }
+ 
+        return res;
+    }
+}
